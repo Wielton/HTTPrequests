@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: none;
+  overflow-y: none;
+}
+
+body {
+  background-color: #1f3c74;
+}
+
+.welDivGrid {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1 / 3;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  display: -ms-grid;
+  display: grid;
+  color: #e1bf74;
+}
+
+.welDivGrid img {
+  width: 200px;
+  height: 200px;
+}
+
+.welDivGrid h1 {
+  text-align: center;
+}
+
+.formGrid {
+  display: -ms-grid;
+  display: grid;
+  color: #e1bf74;
+  justify-items: center;
+}
+
+.formGrid p {
+  text-align: left;
+}
+
+.inputFields {
+  width: 200px;
+}
+
+.formBtns {
+  display: inline-block;
+  background-color: #e1bf74;
+  color: #1f3c74;
+  width: 60px;
+  height: 30px;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 5px;
+  border: none;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  text-align: center;
+}
+
+.btnDiv {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (65px)[4];
+      grid-template-columns: repeat(4, 65px);
+  justify-items: center;
+}
+/*# sourceMappingURL=style.css.map */

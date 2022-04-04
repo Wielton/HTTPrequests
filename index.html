@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/app.js" defer></script>
+    <title>HTTP Requests || Week 12A Assignment</title>
+</head>
+<body>
+    <div id="welcomeDIv" class="welDivGrid">
+        <img src="/contents/logo/Dark-logo-WWD.svg" class="logo" alt="Wielton Web Development logo, blue background, gold font">
+        <h1 class="welMessage">HTTP REQUESTS</h1>
+    </div>  
+    <div id="formDiv" class="formGrid">
+        <h2>POST</h2>
+        <p>Name</p>
+        <input type='text' id='blabUsername' class="inputFields">
+        <p>Title</p>
+        <input type='text' id='blabTitle' class="inputFields">
+        <p>Body</p>
+        <textarea id='blabInput' rows="10" class="inputFields"></textarea>
+        <div class="btnDiv">
+            <button id='blabSubmit' class="formBtns submitBtn">Submit</button>
+            <button id="clearForms" class="formBtns clearBtn">Clear</button>
+            <button id="blabEdit" class="formBtns editBtn">Edit</button>
+            <button id="blabDelete" class="formBtns delBtn">Delete</button>
+        </div>
+    <div id="blabDisplayDiv"></div>
+    </div>
+    <div id="patchDiv"></div>
+</body>
+</html>
