@@ -14,16 +14,9 @@ Setup the index.html to link to your app.js file and do the following:
 
 
 
-3. Make a DELETE request that deletes a "post"
-    https://jsonplaceholder.typicode.com/posts/1 (Links to an external site.) is an example endpoint for this action
-    This request can simply happen when the page loads (or on a button press if you're feeling fancy)
-    If it succeeds, just console.log the response.
 
-4. Make a GET request that grabs all "posts"
-    https://jsonplaceholder.typicode.com/posts (Links to an external site.) is the endpoint for this action
-    This request should happen automatically when the page loads
-    If it succeeds, all the posts should display on the page somehow (think loop)
-    Remember that with these new request types we get different HTTP status sent back on success! Use some console.log lines to figure out what the status being returned is, it should be 2xx
+
+
 
 BONUS:
     -Each post also has "comments" related to it. Read the API docs and for each post, also display the comments for that post.
@@ -41,53 +34,40 @@ BONUS:
 */
 function createPost(){
     // Make a request to POST input from a form
-    const blabUsername = document.getElementById('blabUsername').value;
-    const blabTitle = document.getElementById('blabTitle').value;
-    const blab = document.getElementById('blabInput').value;
-    const blabPost = {blabUsername, blabTitle, blab};
-    console.log(blabPost);
-    axios.request({
+        axios.request({
         method : 'POST',
-        url : 'https://jsonplaceholder.typicode.com/posts',
+        url : 'https://jsonplaceholder.typicode.com/posts/',
         headers : {
             "Content-type" : "application/json"
         },
         data : {
-            username : blabUsername,
-            title : blabTitle,
-            body : blab
-            
-        }
-
-    })
-    // Dependent upon request, either a success or fail will be returned
-    .then(success).catch(fail);
-    
+            userId : document.getElementById('blabUsername').value,
+            title : document.getElementById('blabTitle').value,
+            body : document.getElementById('blabInput').value
+            }
+        }).then(success).catch(fail);
 }
 function success(response){
     console.log(response);
+    Cookies.set('postToken', response.data.id);
     let postSuccessAlert = document.createElement('p');
     let parent = document.getElementById('formDiv');
     parent.appendChild(postSuccessAlert);
     postSuccessAlert.innerText = 'Your post has been created!';
-    
 }
 function fail(error){
     console.log(error);
+    let postFailAlert = document.createElement('p');
+    let parent = document.getElementById('formDiv');
+    parent.appendChild(postFailAlert);
+    postSuccessAlert.innerText = 'Attempt to post failed.';
 }
 
 function clearForms(){
-    let clearTitle = document.getElementById('blabTitle');
-    clearTitle.value="";
-    let clearName = document.getElementById('blabUsername');
-    clearName.value="";
-    let clearBody = document.getElementById('blabInput');
-    clearBody.value="";
+    document.getElementById('blabTitle').value="";
+    document.getElementById('blabUsername').value="";
+    document.getElementById('blabInput').value="";
 }
-
-// Variables
-
-
 
 
 /*
@@ -97,34 +77,98 @@ function clearForms(){
     If it succeeds, just console.log the response.
 */
 function editPost(){
-    const blabUsername = document.getElementById('blabUsername').value;
-    const blabTitle = document.getElementById('blabTitle').value;
-    const blab = document.getElementById('blabInput').value;
-    const blabPost = {blabUsername, blabTitle, blab};
-    console.log(blabPost);
-    axios.patch('https://jsonplaceholder.typicode.com/posts/1',
-            { "username": `${blabUsername}`, "title": `${blabTitle}`, "body": `${blab}` },
-            { headers: { 'Content-Type': 'application/json'}, }
-        ).then((response) => {
-            console.log(response);
-
-        }).catch((error) => {
-            console.log(error);
-        })
+    axios.request({
+        method: "PATCH",
+        url : 'https://jsonplaceholder.typicode.com/posts/1',
+        data : {
+                "title": document.getElementById('blabTitle').value, 
+                "body": document.getElementById('blabInput').value
+            }
+    }).then(postUpdateSuccess).catch(postUpdateFail);
 }
+function postUpdateSuccess(response){
+    console.log(response);
+    Cookies.remove('postToken');
+    Cookies.set('updateToken', response.data.id);
+    let postUpdateAlert = document.createElement('p');
+    let parent = document.getElementById('formDiv');
+    parent.appendChild(postUpdateAlert);
+    postUpdateAlert.innerText = 'Your post has been updated!';
+    
 
+}
+function postUpdateFail(response){
+    console.log(response);
+    let postUpdateAlert = document.createElement('p');
+    let parent = document.getElementById('formDiv');
+    parent.appendChild(postUpdateAlert);
+    postUpdateAlert.innerText = 'Your post failed to update!';
+}
+/*
+3. Make a DELETE request that deletes a "post"
+    https://jsonplaceholder.typicode.com/posts/1 (Links to an external site.) is an example endpoint for this action
+    This request can simply happen when the page loads (or on a button press if you're feeling fancy)
+    If it succeeds, just console.log the response.
+*/
 function deletePost(){
     axios.delete('https://jsonplaceholder.typicode.com/posts/1',
-    {
-        data:{ id : 101}
-    }
-).then((response) => {
-    console.log(response);
-
-}).catch((error) => {
-    console.log(error);
-})
+).then(deleteSuccess).catch(deleteFail);
 }
+function deleteSuccess(response){
+    console.log(response);
+    Cookies.remove('postToken');
+    Cookies.remove('updateToken');
+    
+}
+function deleteFail(response){
+    console.log(response);
+}
+/*
+4. Make a GET request that grabs all "posts"
+    https://jsonplaceholder.typicode.com/posts is the endpoint for this action
+    This request should happen automatically when the page loads
+    If it succeeds, all the posts should display on the page somehow (think loop)
+    Remember that with these new request types we get different HTTP status sent 
+    back on success! Use some console.log lines to figure out what the status being 
+    returned is, it should be 2xx
+*/
+function listComments(response){
+    console.log(response);
+    const users = response.data;
+    console.log(users);
+    users.forEach((user) => {
+        let id = user.id;
+        let title = user.title;
+        let body = user.body;
+        const usersDiv = document.getElementById('blabDisplayDiv');
+        const eachUser = document.createElement('div');
+        let postId = document.createElement('h4');
+        let postTitle = document.createElement('h5');
+        let postBody = document.createElement('p');
+        eachUser.appendChild(postId);
+        eachUser.appendChild(postTitle);
+        eachUser.appendChild(postBody);
+        usersDiv.appendChild(eachUser);
+        eachUser.style.border = "solid";
+        eachUser.style.borderColor = "white";
+        eachUser.style.padding = "2%";
+        eachUser.style.backgroundColor = "#383838";
+        usersDiv.style.margin="auto";
+        usersDiv.style.width="80%";
+        postId.innerText=id;
+        postTitle.innerText=title;
+        postBody.innerText=body;
+    });
+    
+}
+function reqFail(response){
+    console.log(response);
+}
+axios.request({
+    method : "GET",
+    url : 'https://jsonplaceholder.typicode.com/posts',
+
+}).then(listComments).catch(reqFail);
 
 
 //  DOM events and handlers
@@ -134,23 +178,7 @@ document.getElementById('blabEdit').addEventListener('click', editPost);
 document.getElementById('blabDelete').addEventListener('click', deletePost);
 
 
-/*
 
-function makeNewPost(){
-    axios.request({
-        method : "POST",
-        url : "https://jsonplaceholder.typicode.com/posts",
-        headers : {
-            "Content-type" : "application/json"
-        },
-        data : {
-            title : "My awesome tweet",
-            body: "This is a great post",
-            userId : 10
-        }
-    }).then(postSuccess).catch(postFailure);
-}
-*/
 
 
 
